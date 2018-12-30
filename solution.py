@@ -10,7 +10,7 @@ f = open('data.csv')
 # to read csv data from file
 csv_f = csv.reader(f)
 
-# class definition for loan purpose object 
+# class for each loan purpose
 class Purpose:
   def __init__(self, kind, per_loan_wf, tot_per_loan_wf, tot_loan, avg_rate):
     self.kind = kind #type of loan
@@ -19,7 +19,7 @@ class Purpose:
     self.tot_loan = tot_loan #total loan amount
     self.avg_rate = avg_rate #avg interest rate
 
-  # function to calculate average weighted average interest using value of funded amount 
+  # function to calculate weighted average interest using value of funded amount 
   def int_rate_calc( Purpose ):
 	for row in csv_f:
 		if row[16] == Purpose.kind:
@@ -70,7 +70,7 @@ home_improvement.int_rate_calc()
 
 f.close() #close file
 
-# dataframe to convert output data into csv file
+# dataframe to convert output data to csv file
 data = {'purpose': ['car', 'credit_card', 'debt_consolidation', 'home_improvement', 'house', 'major_purchase', 'medical', 'moving', 'other', 'small_business', 'vacation', 'wedding'], 
         'avg_rate': [car.avg_rate, credit_card.avg_rate, debt_consolidation.avg_rate, home_improvement.avg_rate, house.avg_rate, major_purchase.avg_rate, medical.avg_rate, moving.avg_rate, other.avg_rate, small_business.avg_rate, vacation.avg_rate, wedding.avg_rate]}
 df = pd.DataFrame(data, columns = ['purpose', 'avg_rate'])
@@ -97,13 +97,14 @@ plt.rcParams['axes.facecolor'] = 'whitesmoke'
 plt.bar(left, rate, tick_label = tick_label, 
         width = 0.8, color = ['mediumaquamarine', 'lightsalmon', 'steelblue', 'plum', 'yellowgreen', 'gold', 'burlywood', 'lightslategray', 'orchid', 'deepskyblue', 'thistle', 'coral']) 
   
-# naming x-axis 
+# x-axis label
 plt.xlabel('purpose') 
-# naming y-axis 
+# y-axis label
 plt.ylabel('mean(int_rate)') 
 # plot title 
 plt.title('MAIS 202 Coding Challenge - Karim Hout') 
-# plot png file
+
+# output png file for plot
 out_png = 'results.png'
 plt.savefig(out_png, dpi=200)
 
