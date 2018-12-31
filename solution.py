@@ -12,31 +12,21 @@ csv_f = csv.reader(f)
 
 # class for each loan purpose
 class Purpose:
-  def __init__(self, kind, per_loan_wf, tot_per_loan_wf, tot_loan, avg_rate):
+  def __init__(self, kind, per_loan_wf, tot_per_loan_wf, count, avg_rate):
     self.kind = kind #type of loan
     self.per_loan_wf = per_loan_wf #per loan weight factor
     self.tot_per_loan_wf = tot_per_loan_wf #total per loan weight factor
-    self.tot_loan = tot_loan #total loan amount
+    self.count = count #total loan amount
     self.avg_rate = avg_rate #avg interest rate
 
-  # function to calculate weighted average interest
+  # function to calculate average interest rate
   def int_rate_calc( Purpose ):
 	for row in csv_f:
-		if row[16] == Purpose.kind and row[14] == "Fully Paid":
-			Purpose.per_loan_wf = float(row[2]) * float(row[5])/float(100)
+		if row[16] == Purpose.kind:
+			Purpose.per_loan_wf = float(row[5])
 			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
-			Purpose.tot_loan += float(row[2])
-			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
-		elif row[16] == Purpose.kind and row[14] == "Charged Off":
-			Purpose.per_loan_wf = (float(row[29]) + float(row[31]) + float(row[32]) + float(row[33])) * float(row[5])/float(100)
-			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
-			Purpose.tot_loan += float(row[29]) + float(row[31]) + float(row[32]) + float(row[33])
-			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
-		elif row[16] == Purpose.kind and row[14] == "Current":
-			Purpose.per_loan_wf = float(row[27]) * float(row[5])/float(100)
-			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
-			Purpose.tot_loan += float(row[27])
-			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
+			Purpose.count += 1
+	Purpose.avg_rate += Purpose.tot_per_loan_wf/Purpose.count
 	f.seek(0) #to return to the top of the csv file 
 	return;
 
@@ -116,4 +106,4 @@ plt.title('MAIS 202 Coding Challenge - Karim Hout')
 
 # output png file for plot
 out_png = 'results.png'
-plt.savefig(out_png, dpi=200)
+plt.savefig(out_png, dpi=150)
