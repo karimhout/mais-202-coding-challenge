@@ -37,7 +37,7 @@ class Purpose:
 			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
 			Purpose.tot_loan += float(row[27])
 			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
-	f.seek(0) #to return to the top of the csv file after each function call
+	f.seek(0) #to return to the top of the csv file 
 	return;
 
 # initializing each Purpose object and calls to int_rate_calc function
