@@ -33,7 +33,7 @@ class Purpose:
 			Purpose.tot_loan += float(row[29]) + float(row[31]) + float(row[32]) + float(row[33])
 			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
 		elif row[16] == Purpose.kind and row[14] == "Current":
-			Purpose.per_loan_wf = float(row[29]) * float(row[5])/float(100)
+			Purpose.per_loan_wf = float(row[27]) * float(row[5])/float(100)
 			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
 			Purpose.tot_loan += float(row[27])
 			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
@@ -117,14 +117,3 @@ plt.title('MAIS 202 Coding Challenge - Karim Hout')
 # output png file for plot
 out_png = 'results.png'
 plt.savefig(out_png, dpi=200)
-
-
-
-
-
-
-
-
-
-
-
