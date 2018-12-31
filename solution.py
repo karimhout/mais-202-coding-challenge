@@ -12,21 +12,21 @@ csv_f = csv.reader(f)
 
 # class for each loan purpose
 class Purpose:
-  def __init__(self, kind, per_loan_wf, tot_per_loan_wf, count, avg_rate):
+  def __init__(self, kind, per_loan_rate, tot_per_loan_rate, count, avg_rate):
     self.kind = kind #type of loan
-    self.per_loan_wf = per_loan_wf #per loan weight factor
-    self.tot_per_loan_wf = tot_per_loan_wf #total per loan weight factor
-    self.count = count #total loan amount
+    self.per_loan_rate = per_loan_rate #per loan interest rate
+    self.tot_per_loan_rate = tot_per_loan_rate #total per loan interest rate
+    self.count = count #instances of this loan purpose
     self.avg_rate = avg_rate #avg interest rate
 
   # function to calculate average interest rate
   def int_rate_calc( Purpose ):
 	for row in csv_f:
 		if row[16] == Purpose.kind:
-			Purpose.per_loan_wf = float(row[5])
-			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
+			Purpose.per_loan_rate = float(row[5])
+			Purpose.tot_per_loan_rate += Purpose.per_loan_rate
 			Purpose.count += 1
-	Purpose.avg_rate += Purpose.tot_per_loan_wf/Purpose.count
+	Purpose.avg_rate += Purpose.tot_per_loan_rate/Purpose.count
 	f.seek(0) #to return to the top of the csv file 
 	return;
 
@@ -106,4 +106,4 @@ plt.title('MAIS 202 Coding Challenge - Karim Hout')
 
 # output png file for plot
 out_png = 'results.png'
-plt.savefig(out_png, dpi=150)
+plt.savefig(out_png, dpi=300)
