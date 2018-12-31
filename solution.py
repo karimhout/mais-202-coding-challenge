@@ -19,13 +19,23 @@ class Purpose:
     self.tot_loan = tot_loan #total loan amount
     self.avg_rate = avg_rate #avg interest rate
 
-  # function to calculate weighted average interest using value of funded amount 
+  # function to calculate weighted average interest
   def int_rate_calc( Purpose ):
 	for row in csv_f:
-		if row[16] == Purpose.kind:
+		if row[16] == Purpose.kind and row[14] == "Fully Paid":
 			Purpose.per_loan_wf = float(row[2]) * float(row[5])/float(100)
 			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
 			Purpose.tot_loan += float(row[2])
+			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
+		elif row[16] == Purpose.kind and row[14] == "Charged Off":
+			Purpose.per_loan_wf = (float(row[29]) + float(row[31]) + float(row[32]) + float(row[33])) * float(row[5])/float(100)
+			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
+			Purpose.tot_loan += float(row[29]) + float(row[31]) + float(row[32]) + float(row[33])
+			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
+		elif row[16] == Purpose.kind and row[14] == "Current":
+			Purpose.per_loan_wf = float(row[29]) * float(row[5])/float(100)
+			Purpose.tot_per_loan_wf += Purpose.per_loan_wf
+			Purpose.tot_loan += float(row[27])
 			Purpose.avg_rate = float(100) * Purpose.tot_per_loan_wf/Purpose.tot_loan
 	f.seek(0) #to return to the top of the csv file after each function call
 	return;
