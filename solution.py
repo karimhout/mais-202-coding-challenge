@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import collections
 
 # open csv file and read data
 f = open('data.csv')
@@ -33,7 +34,7 @@ rate_col = 0
 purpose_col = 0
 names = [] # list of unique purposes
 purposes = [] # list of purpose objects
-purposes_rates = {} # dictionary of purpose:avg_rate pairs
+purposes_rates = collections.OrderedDict() # ordered dictionary of purpose:avg_rate pairs
 
 # loop through csv file to determine int_rate column and purpose column
 # populate names
@@ -54,6 +55,9 @@ f.seek(0) # return to top of csv file
 # populate purposes with new purpose objects
 for name in names:
     purposes.append(Purpose(name,0.0,0.0,0.0))
+
+# sort purposes alphabetically
+purposes.sort(key=lambda purpose: purpose.name, reverse=False)
 
 # populate purposes_rates with purpose:avg_rate pairs
 for purpose in purposes:
