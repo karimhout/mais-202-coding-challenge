@@ -1,109 +1,96 @@
+# Author: Karim Hout 
 import csv
 import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-# open data file
+# open csv file and read data
 f = open('data.csv')
-
-# to read csv data from file
 csv_f = csv.reader(f)
 
 # class for each loan purpose
 class Purpose:
-  def __init__(self, kind, per_loan_rate, tot_per_loan_rate, count, avg_rate):
-    self.kind = kind #type of loan
-    self.per_loan_rate = per_loan_rate #per loan interest rate
-    self.tot_per_loan_rate = tot_per_loan_rate #total per loan interest rate
-    self.count = count #instances of this loan purpose
-    self.avg_rate = avg_rate #avg interest rate
+  def __init__(self, name, sum_loan_rate, count, avg_rate):
+    self.name = name # name of purpose
+    self.sum_loan_rate = sum_loan_rate # sum of loan interest rate
+    self.count = count # count of purpose
+    self.avg_rate = avg_rate # avg interest rate 
 
   # function to calculate average interest rate
-  def int_rate_calc( Purpose ):
-	for row in csv_f:
-		if row[16] == Purpose.kind:
-			Purpose.per_loan_rate = float(row[5])
-			Purpose.tot_per_loan_rate += Purpose.per_loan_rate
-			Purpose.count += 1
-	Purpose.avg_rate += Purpose.tot_per_loan_rate/Purpose.count
-	f.seek(0) #to return to the top of the csv file 
-	return;
+  def int_rate_calc( Purpose, purpose_col, rate_col ):
+    for row in csv_f:
+        if row[purpose_col] == Purpose.name:
+            Purpose.sum_loan_rate += float(row[rate_col])
+            Purpose.count += 1
+    Purpose.avg_rate += Purpose.sum_loan_rate/Purpose.count
+    f.seek(0) # return to top of csv file
+    return;
 
-# initializing each Purpose object and calls to int_rate_calc function
+row_index = 0
+col_index = 0
+rate_col = 0
+purpose_col = 0
+names = [] # list of unique purposes
+purposes = [] # list of purpose objects
+purposes_rates = {} # dictionary of purpose:avg_rate pairs
 
-debt_consolidation = Purpose("debt_consolidation",0.0,0.0,0.0,0.0)
-debt_consolidation.int_rate_calc()
+# loop through csv file to determine int_rate column and purpose column
+# populate types list
+for row in csv_f:
+    if row_index == 0:
+        for cell in row:
+            if cell == "int_rate":
+                rate_col = col_index
+            if cell == "purpose":
+                purpose_col = col_index
+            col_index += 1
+        row_index += 1
+    else:
+        if row[purpose_col] not in names:
+            names.append(row[purpose_col])
+f.seek(0) # return to top of csv file
 
-house = Purpose("house",0.0,0.0,0.0,0.0)
-house.int_rate_calc()
+# populate purposes with new purpose objects
+for name in names:
+    purpose = Purpose(name,0.0,0.0,0.0)
+    purposes.append(purpose)
 
-car = Purpose("car",0.0,0.0,0.0,0.0)
-car.int_rate_calc()
-
-medical = Purpose("medical",0.0,0.0,0.0,0.0)
-medical.int_rate_calc()
-
-vacation = Purpose("vacation",0.0,0.0,0.0,0.0)
-vacation.int_rate_calc()
-
-credit_card = Purpose("credit_card",0.0,0.0,0.0,0.0)
-credit_card.int_rate_calc()
-
-other = Purpose("other",0.0,0.0,0.0,0.0)
-other.int_rate_calc()
-
-moving = Purpose("moving",0.0,0.0,0.0,0.0)
-moving.int_rate_calc()
-
-wedding = Purpose("wedding",0.0,0.0,0.0,0.0)
-wedding.int_rate_calc()
-
-small_business = Purpose("small_business",0.0,0.0,0.0,0.0)
-small_business.int_rate_calc()
-
-major_purchase = Purpose("major_purchase",0.0,0.0,0.0,0.0)
-major_purchase.int_rate_calc()
-
-home_improvement = Purpose("home_improvement",0.0,0.0,0.0,0.0)
-home_improvement.int_rate_calc()
+# populate purposes_rates with purpose:avg_rate pairs
+for purpose in purposes:
+    purpose.int_rate_calc(purpose_col, rate_col)
+    purposes_rates[purpose.name] = purpose.avg_rate
 
 f.close() #close file
 
-# dataframe to convert output data to csv file
-data = {'purpose': ['car', 'credit_card', 'debt_consolidation', 'home_improvement', 'house', 'major_purchase', 'medical', 'moving', 'other', 'small_business', 'vacation', 'wedding'], 
-        'avg_rate': [car.avg_rate, credit_card.avg_rate, debt_consolidation.avg_rate, home_improvement.avg_rate, house.avg_rate, major_purchase.avg_rate, medical.avg_rate, moving.avg_rate, other.avg_rate, small_business.avg_rate, vacation.avg_rate, wedding.avg_rate]}
+# convert output data to csv file
+data = {'purpose': purposes_rates.keys(), 
+        'avg_rate': purposes_rates.values()}
 df = pd.DataFrame(data, columns = ['purpose', 'avg_rate'])
 df
-
 df.to_csv('results.csv')
 
-# x-coordinates of left sides of bars  
-left = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
-  
-# heights of bars 
-rate = [car.avg_rate, credit_card.avg_rate, debt_consolidation.avg_rate, home_improvement.avg_rate, house.avg_rate, major_purchase.avg_rate, medical.avg_rate, moving.avg_rate, other.avg_rate, small_business.avg_rate, vacation.avg_rate, wedding.avg_rate] 
-  
-# labels for bars 
-tick_label = ['car', 'credit_card', 'debt_consolidation', 'home_improvement', 'house', 'major_purchase', 'medical', 'moving', 'other', 'small_business', 'vacation', 'wedding'] 
-  
-# size of plot 
+# generate bar graph 
+# x-coordinates of left sides of bars
+left = []
+index = 0
+for pair in purposes_rates:
+    left.append(index)
+    index += 1
+
+rate = purposes_rates.values()
+tick_label = purposes_rates.keys() 
 plt.rcParams['figure.figsize'] = (25,10)
-
-# background plot color
 plt.rcParams['axes.facecolor'] = 'whitesmoke'
-
-# plotting bar graph 
 plt.bar(left, rate, tick_label = tick_label, 
-        width = 0.8, color = ['mediumaquamarine', 'lightsalmon', 'steelblue', 'plum', 'yellowgreen', 'gold', 'burlywood', 'lightslategray', 'orchid', 'deepskyblue', 'thistle', 'coral']) 
-  
-# x-axis label
+        width = 0.8, color = ['mediumaquamarine', 'lightsalmon', 'steelblue', 'plum', 'yellowgreen', 'gold', 'burlywood', 'lightslategray', 'orchid', 'deepskyblue', 'thistle', 'coral'])  
 plt.xlabel('purpose') 
-# y-axis label
-plt.ylabel('mean(int_rate)') 
-# plot title 
-plt.title('MAIS 202 Coding Challenge - Karim Hout') 
-
-# output png file for plot
+plt.ylabel('mean(int_rate)')  
 out_png = 'results.png'
 plt.savefig(out_png, dpi=300)
+
+
+
+
+
+
