@@ -36,7 +36,7 @@ purposes = [] # list of purpose objects
 purposes_rates = {} # dictionary of purpose:avg_rate pairs
 
 # loop through csv file to determine int_rate column and purpose column
-# populate types list
+# populate names
 for row in csv_f:
     if row_index == 0:
         for cell in row:
