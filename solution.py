@@ -42,7 +42,7 @@ for row in csv_f:
         for cell in row:
             if cell == "int_rate":
                 rate_col = col_index
-            if cell == "purpose":
+            elif cell == "purpose":
                 purpose_col = col_index
             col_index += 1
         row_index += 1
