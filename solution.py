@@ -53,8 +53,7 @@ f.seek(0) # return to top of csv file
 
 # populate purposes with new purpose objects
 for name in names:
-    purpose = Purpose(name,0.0,0.0,0.0)
-    purposes.append(purpose)
+    purposes.append(Purpose(name,0.0,0.0,0.0))
 
 # populate purposes_rates with purpose:avg_rate pairs
 for purpose in purposes:
