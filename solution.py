@@ -33,7 +33,7 @@ col_index = 0
 rate_col = 0
 purpose_col = 0
 purposes = [] # list of Purpose objects
-purposes_rates = collections.OrderedDict() # ordered dictionary of purpose:avg_rate pairs
+purposes_rates = collections.OrderedDict() # ordered dictionary of purpose name - avg_rate pairs
 
 # loop through csv file to determine int_rate column and purpose column
 # append purposes with new Purpose object if name is unique
@@ -53,7 +53,7 @@ f.seek(0) # return to top of csv file
 # sort purposes by name 
 purposes.sort(key=lambda purpose: purpose.name, reverse=False)
 
-# populate purposes_rates with purpose:avg_rate pairs
+# populate purposes_rates with purpose name - avg_rate pairs
 for purpose in purposes:
     purpose.int_rate_calc(purpose_col, rate_col)
     purposes_rates[purpose.name] = purpose.avg_rate
