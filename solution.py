@@ -36,7 +36,7 @@ purposes = [] # list of Purpose objects
 purposes_rates = collections.OrderedDict() # ordered dictionary of purpose:avg_rate pairs
 
 # loop through csv file to determine int_rate column and purpose column
-# append purposes with new purpose object if name is unique
+# append purposes with new Purpose object if name is unique
 for row in csv_f:
     if row_index == 0:
         for cell in row:
@@ -46,10 +46,8 @@ for row in csv_f:
                 purpose_col = col_index
             col_index += 1
         row_index += 1
-    else:
-        if not any(purpose.name == row[purpose_col] for purpose in purposes):
-            purposes.append(Purpose(row[purpose_col],0.0))
-
+    elif not any(purpose.name == row[purpose_col] for purpose in purposes):
+        purposes.append(Purpose(row[purpose_col],0.0))
 f.seek(0) # return to top of csv file
 
 # sort purposes alphabetically
