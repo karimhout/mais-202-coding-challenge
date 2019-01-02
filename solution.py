@@ -24,7 +24,7 @@ class Purpose:
         if row[purpose_col] == Purpose.name:
             Purpose.sum_loan_rate += float(row[rate_col])
             Purpose.count += 1
-    Purpose.avg_rate += Purpose.sum_loan_rate/Purpose.count
+    Purpose.avg_rate = Purpose.sum_loan_rate/Purpose.count
     f.seek(0) # return to top of csv file
     return;
 
