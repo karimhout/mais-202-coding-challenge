@@ -18,7 +18,7 @@ class Purpose:
 
   # function to calculate average interest rate
   def int_rate_calc( self, purpose_col, rate_col ):
-    sum_loan_rate = 0.0
+    sum_loan_rate = 0
     count = 0
     for row in csv_f:
         if row[purpose_col] == self.name:
@@ -76,12 +76,12 @@ for pair in purposes_rates:
     index += 1
 
 rate = purposes_rates.values()
-tick_label = purposes_rates.keys() 
+tick_label = purposes_rates.keys()
 plt.rcParams['figure.figsize'] = (25,10)
 plt.rcParams['axes.facecolor'] = 'whitesmoke'
 plt.bar(left, rate, tick_label = tick_label, 
         width = 0.8, color = ['mediumaquamarine', 'lightsalmon', 'steelblue', 'plum', 'yellowgreen', 'gold', 'burlywood', 'lightslategray', 'orchid', 'deepskyblue', 'thistle', 'coral'])  
 plt.xlabel('purpose') 
-plt.ylabel('mean(int_rate)')  
+plt.ylabel('mean(int_rate)')
 out_png = 'results.png'
 plt.savefig(out_png, dpi=300)
