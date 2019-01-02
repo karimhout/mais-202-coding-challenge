@@ -12,19 +12,19 @@ csv_f = csv.reader(f)
 
 # class for each loan purpose
 class Purpose:
-  def __init__(self, name, sum_loan_rate, count, avg_rate):
+  def __init__(self, name, avg_rate):
     self.name = name # name of purpose
-    self.sum_loan_rate = sum_loan_rate # sum of loan interest rate
-    self.count = count # count of purpose
-    self.avg_rate = avg_rate # avg interest rate 
+    self.avg_rate = avg_rate # avg interest rate of purpose
 
   # function to calculate average interest rate
   def int_rate_calc( Purpose, purpose_col, rate_col ):
+    sum_loan_rate = 0
+    count = 0
     for row in csv_f:
         if row[purpose_col] == Purpose.name:
-            Purpose.sum_loan_rate += float(row[rate_col])
-            Purpose.count += 1
-    Purpose.avg_rate = Purpose.sum_loan_rate/Purpose.count
+            sum_loan_rate += float(row[rate_col])
+            count += 1
+    Purpose.avg_rate = sum_loan_rate/count
     f.seek(0) # return to top of csv file
     return;
 
@@ -32,12 +32,11 @@ row_index = 0
 col_index = 0
 rate_col = 0
 purpose_col = 0
-names = [] # list of unique purposes
-purposes = [] # list of purpose objects
+purposes = [] # list of Purpose objects
 purposes_rates = collections.OrderedDict() # ordered dictionary of purpose:avg_rate pairs
 
 # loop through csv file to determine int_rate column and purpose column
-# populate names
+# append purposes with new purpose object if name is unique
 for row in csv_f:
     if row_index == 0:
         for cell in row:
@@ -48,13 +47,10 @@ for row in csv_f:
             col_index += 1
         row_index += 1
     else:
-        if row[purpose_col] not in names:
-            names.append(row[purpose_col])
-f.seek(0) # return to top of csv file
+        if not any(purpose.name == row[purpose_col] for purpose in purposes):
+            purposes.append(Purpose(row[purpose_col],0.0))
 
-# populate purposes with new purpose objects
-for name in names:
-    purposes.append(Purpose(name,0.0,0.0,0.0))
+f.seek(0) # return to top of csv file
 
 # sort purposes alphabetically
 purposes.sort(key=lambda purpose: purpose.name, reverse=False)
@@ -91,9 +87,3 @@ plt.xlabel('purpose')
 plt.ylabel('mean(int_rate)')  
 out_png = 'results.png'
 plt.savefig(out_png, dpi=300)
-
-
-
-
-
-
