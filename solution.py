@@ -75,6 +75,9 @@ for pair in purposes_rates:
     left.append(index)
     index += 1
 
+plt.rcParams["axes.grid.axis"] ="y"
+plt.rcParams["axes.axisbelow"] = True
+plt.rcParams["axes.grid"] = True
 rate = purposes_rates.values()
 tick_label = purposes_rates.keys()
 plt.rcParams['figure.figsize'] = (25,10)
