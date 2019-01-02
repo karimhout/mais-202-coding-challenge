@@ -17,14 +17,14 @@ class Purpose:
     self.avg_rate = avg_rate # avg interest rate of purpose
 
   # function to calculate average interest rate
-  def int_rate_calc( Purpose, purpose_col, rate_col ):
+  def int_rate_calc( self, purpose_col, rate_col ):
     sum_loan_rate = 0
     count = 0
     for row in csv_f:
-        if row[purpose_col] == Purpose.name:
+        if row[purpose_col] == self.name:
             sum_loan_rate += float(row[rate_col])
             count += 1
-    Purpose.avg_rate = sum_loan_rate/count
+    self.avg_rate = sum_loan_rate/count
     f.seek(0) # return to top of csv file
     return;
 
