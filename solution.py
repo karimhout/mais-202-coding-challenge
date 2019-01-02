@@ -18,7 +18,7 @@ class Purpose:
 
   # function to calculate average interest rate
   def int_rate_calc( self, purpose_col, rate_col ):
-    sum_loan_rate = 0
+    sum_loan_rate = 0.0
     count = 0
     for row in csv_f:
         if row[purpose_col] == self.name:
