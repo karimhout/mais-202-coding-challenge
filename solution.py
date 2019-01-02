@@ -50,7 +50,7 @@ for row in csv_f:
         purposes.append(Purpose(row[purpose_col],0.0))
 f.seek(0) # return to top of csv file
 
-# sort purposes alphabetically
+# sort purposes by name 
 purposes.sort(key=lambda purpose: purpose.name, reverse=False)
 
 # populate purposes_rates with purpose:avg_rate pairs
